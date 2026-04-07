@@ -1,0 +1,11 @@
+vendor_font_exceptions:
+  - founders-grotesk-regular
+  - Metropolis
+  - fontawesome
+  - slick
+vendor_selector_keywords:
+  - bazaarvoice
+  - bv-
+  - userway
+  - fontawesome
+  - slick

@@ -1,0 +1,10 @@
+scan:
+  max_pages: 100
+  max_depth: 4
+  viewport: both
+  screenshot: page
+  fail_on: medium
+  sitemap: auto
+  keep_query_strings: false
+  max_elements_per_page: 400
+  output_formats: [json, markdown, html]

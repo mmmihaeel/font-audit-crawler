@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Font Audit Report</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Georgia, serif;
+      --bg: #f5f3ef;
+      --fg: #1e1b18;
+      --muted: #5c544c;
+      --card: #ffffff;
+      --line: #d8d0c6;
+      --high: #a32d22;
+      --medium: #996515;
+      --manual: #375a7f;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #fff8ef 0%, var(--bg) 48%);
+      color: var(--fg);
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    h1, h2, h3 {
+      font-family: "Trebuchet MS", sans-serif;
+      letter-spacing: 0.02em;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .card, .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(30, 27, 24, 0.05);
+    }
+    .card {
+      padding: 16px 18px;
+    }
+    .metric {
+      font-size: 1.8rem;
+      font-weight: 700;
+      font-family: "Trebuchet MS", sans-serif;
+    }
+    .panel {
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    code, pre {
+      background: #f3efe8;
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .severity-high { color: var(--high); }
+    .severity-medium { color: var(--medium); }
+    .severity-manual_review { color: var(--manual); }
+    .finding {
+      border-left: 4px solid var(--line);
+      padding-left: 14px;
+      margin-bottom: 22px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+    .muted {
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Font Audit Report</h1>
+    <p class="muted">{{ report.site }}</p>
+
+    <section class="cards">
+      <article class="card">
+        <div class="muted">Scanned Pages</div>
+        <div class="metric">{{ report.summary.scanned_pages }}</div>
+      </article>
+      <article class="card">
+        <div class="muted">Successful Pages</div>
+        <div class="metric">{{ report.summary.successful_pages }}</div>
+      </article>
+      <article class="card">
+        <div class="muted">Load Errors</div>
+        <div class="metric">{{ report.summary.errored_pages }}</div>
+      </article>
+      <article class="card">
+        <div class="muted">Findings</div>
+        <div class="metric">{{ report.summary.findings_total }}</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Head Requirements</h2>
+      <p><strong>Required approved families:</strong> {{ report.head_requirements.required_families }}</p>
+      <p><strong>Google-hosted:</strong> {{ report.head_requirements.google_hosted_families }}</p>
+      <p><strong>Non-Google:</strong> {{ report.head_requirements.non_google_families }}</p>
+      {% if report.head_requirements.google_fonts_snippet %}
+      <h3>Google Fonts Snippet</h3>
+      <pre>{{ report.head_requirements.google_fonts_snippet }}</pre>
+      {% endif %}
+      {% if report.head_requirements.notes %}
+      <h3>Notes</h3>
+      <ul>
+        {% for note in report.head_requirements.notes %}
+        <li>{{ note }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </section>
+
+    <section class="panel">
+      <h2>Recommended Replacements</h2>
+      {% if report.recommended_replacements %}
+      <table>
+        <thead>
+          <tr>
+            <th>Detected family</th>
+            <th>Recommended family</th>
+            <th>Occurrences</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in report.recommended_replacements %}
+          <tr>
+            <td><code>{{ item.detected_family }}</code></td>
+            <td><code>{{ item.recommended_family }}</code></td>
+            <td>{{ item.occurrences }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>No non-approved runtime families were detected.</p>
+      {% endif %}
+    </section>
+
+    <section class="panel">
+      <h2>Pages</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>URL</th>
+            <th>Viewport</th>
+            <th>Visible text</th>
+            <th>Font faces</th>
+            <th>Font requests</th>
+            <th>Findings</th>
+            <th>Screenshot</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for page in report.pages %}
+          <tr>
+            <td><code>{{ page.url }}</code></td>
+            <td>{{ page.viewport }}</td>
+            <td>{{ page.visible_text_elements }}</td>
+            <td>{{ page.font_face_rules }}</td>
+            <td>{{ page.font_requests }}</td>
+            <td>{{ page.findings_total }}</td>
+            <td>
+              {% if page.screenshot_path %}
+              <a href="{{ page.screenshot_path }}">{{ page.screenshot_path }}</a>
+              {% else %}
+              -
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Findings</h2>
+      {% if not report.findings %}
+      <p>No findings.</p>
+      {% endif %}
+      {% for finding in report.findings %}
+      <article class="finding">
+        <h3>{{ finding.type.value }}</h3>
+        <p class="severity-{{ finding.severity.value }}"><strong>{{ finding.severity.value }}</strong></p>
+        <p><strong>URL:</strong> <code>{{ finding.url }}</code></p>
+        <p><strong>Viewport:</strong> {{ finding.viewport }}</p>
+        {% if finding.selector %}
+        <p><strong>Selector:</strong> <code>{{ finding.selector }}</code></p>
+        {% endif %}
+        {% if finding.text_sample %}
+        <p><strong>Text:</strong> {{ finding.text_sample }}</p>
+        {% endif %}
+        {% if finding.font_stack %}
+        <p><strong>Runtime stack:</strong> <code>{{ finding.font_stack }}</code></p>
+        {% endif %}
+        {% if finding.primary_font %}
+        <p><strong>Primary font:</strong> <code>{{ finding.primary_font }}</code></p>
+        {% endif %}
+        {% if finding.recommended %}
+        <p><strong>Recommended family:</strong> <code>{{ finding.recommended.family }}</code></p>
+        <p><strong>Recommended stack:</strong> <code>{{ finding.recommended.css_stack }}</code></p>
+        <p><strong>Preserve weight/style:</strong> <code>{{ finding.recommended.font_weight }}</code> / <code>{{ finding.recommended.font_style }}</code></p>
+        {% endif %}
+        {% if finding.note %}
+        <p><strong>Note:</strong> {{ finding.note }}</p>
+        {% endif %}
+        {% if finding.evidence.get("occurrences") %}
+        <p><strong>Occurrences:</strong> {{ finding.evidence.get("occurrences") }}</p>
+        {% endif %}
+        {% if finding.evidence.get("sample_selectors") %}
+        <p><strong>Sample selectors:</strong> <code>{{ finding.evidence.get("sample_selectors") }}</code></p>
+        {% endif %}
+        {% if finding.evidence.get("sample_texts") %}
+        <p><strong>Sample texts:</strong> <code>{{ finding.evidence.get("sample_texts") }}</code></p>
+        {% endif %}
+        {% if finding.evidence %}
+        <pre>{{ finding.evidence }}</pre>
+        {% endif %}
+        {% if finding.screenshot_path %}
+        <p><strong>Screenshot:</strong> <a href="{{ finding.screenshot_path }}">{{ finding.screenshot_path }}</a></p>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </section>
+  </main>
+</body>
+</html>

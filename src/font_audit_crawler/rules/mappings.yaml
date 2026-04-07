@@ -1,0 +1,33 @@
+explicit_mappings:
+  helvetica: Roboto
+  helveticaneue: Roboto
+  arial: Roboto
+  arialblack: Roboto
+  segoeui: Roboto
+  robotocondensed: Roboto Condensed
+  montserrat: Montserrat
+  newheroaccess: NewHeroAccess
+  gothamnarrow: Roboto Condensed
+  oswald: Roboto Condensed
+default_replacement: Roboto
+condensed_replacement: Roboto Condensed
+condensed_indicators:
+  - condensed
+  - narrow
+  - compressed
+known_legacy_families:
+  - metapro
+  - gilroy
+  - gotham
+  - gothampro
+  - gothamnarrow
+  - gothamssm
+  - avenir
+  - avenirnext
+  - inter
+  - mulish
+  - nunito
+  - publicsans
+  - sourcesanspro
+  - opensans
+  - notosans

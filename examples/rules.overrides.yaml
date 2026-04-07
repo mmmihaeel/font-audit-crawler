@@ -1,0 +1,14 @@
+vendors:
+  vendor_selector_keywords:
+    - bazaarvoice
+    - bv-
+    - userway
+    - trustpilot
+locale:
+  locale_fallbacks:
+    - Meiryo
+    - YuGothic
+    - Hiragino Kaku Gothic ProN
+    - MS PGothic
+    - Osaka
+    - Noto Sans JP

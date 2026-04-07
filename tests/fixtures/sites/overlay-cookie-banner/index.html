@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Overlay Cookie Banner</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 2rem;
+    }
+    #cookie-banner {
+      position: fixed;
+      inset: auto 1rem 1rem 1rem;
+      background: #222;
+      color: #fff;
+      padding: 1rem;
+      z-index: 9999;
+      font-family: Arial, sans-serif;
+    }
+    #cookie-banner .policy {
+      font-family: "Times New Roman", serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Approved page content</h1>
+  <p>The audit should ignore the dismissed banner.</p>
+  <button id="ot-sdk-btn" style="font-family: Arial, sans-serif;">Cookie Settings</button>
+
+  <div id="onetrust-banner-sdk" role="dialog" aria-modal="true">
+    <div id="cookie-banner">
+      <p class="policy">This cookie banner intentionally uses non-approved fonts.</p>
+      <button
+        id="onetrust-reject-all-handler"
+        onclick="document.getElementById('onetrust-banner-sdk').remove()"
+      >
+        Reject all
+      </button>
+    </div>
+  </div>
+</body>
+</html>

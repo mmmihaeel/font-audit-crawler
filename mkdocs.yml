@@ -1,0 +1,24 @@
+site_name: font-audit-crawler
+site_description: Deterministic runtime font compliance auditing for remediation QA.
+repo_url: https://github.com/mmmihaeel/font-audit-crawler
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - CLI: cli.md
+  - Rules Engine: rules-engine.md
+  - Reports: reports.md
+  - Testing: testing.md

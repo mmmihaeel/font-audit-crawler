@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>{{BASE_URL}}/</loc></url>
+  <url><loc>{{BASE_URL}}/approved.html</loc></url>
+  <url><loc>{{BASE_URL}}/bad-local-font-face.html</loc></url>
+  <url><loc>{{BASE_URL}}/suspicious-fallback.html</loc></url>
+  <url><loc>{{BASE_URL}}/non-approved-legacy.html</loc></url>
+  <url><loc>{{BASE_URL}}/inline-style.html</loc></url>
+  <url><loc>{{BASE_URL}}/vendor-widget.html</loc></url>
+  <url><loc>{{BASE_URL}}/locale-review.html</loc></url>
+</urlset>

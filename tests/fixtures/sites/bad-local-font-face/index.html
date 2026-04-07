@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bad Local Font Face</title>
+  <style>
+    @font-face {
+      font-family: 'Roboto';
+      src: url('/assets/roboto-local.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Approved family loaded locally</h1>
+  <p>This should be a failure because local CSS is loading fonts.</p>
+</body>
+</html>

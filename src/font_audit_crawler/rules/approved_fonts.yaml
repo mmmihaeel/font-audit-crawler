@@ -1,0 +1,15 @@
+approved_families:
+  - name: Roboto
+    google_hosted: true
+    google_family: Roboto
+    google_weights: [100, 300, 400, 500, 700, 800, 900]
+  - name: Roboto Condensed
+    google_hosted: true
+    google_family: Roboto+Condensed
+    google_weights: [300, 400, 700]
+  - name: Montserrat
+    google_hosted: true
+    google_family: Montserrat
+    google_weights: [300, 400, 500, 600, 700, 800]
+  - name: NewHeroAccess
+    google_hosted: false

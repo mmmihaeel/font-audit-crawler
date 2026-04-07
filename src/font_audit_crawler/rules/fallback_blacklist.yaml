@@ -1,0 +1,12 @@
+disallowed_fallbacks:
+  - Arial
+  - Helvetica
+  - Helvetica Neue
+  - Segoe UI
+  - -apple-system
+  - BlinkMacSystemFont
+  - Open Sans
+  - Source Sans Pro
+  - Noto Sans
+suspicious_aliases:
+  - clean
