@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "font-audit-crawler"
-version = "0.1.0"
+version = "0.1.1"
 description = "Deterministic Playwright-based crawler for runtime font compliance audits and font remediation QA."
 readme = "README.md"
 requires-python = ">=3.12"

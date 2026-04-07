@@ -162,7 +162,17 @@ def classify_element(
         return findings
 
     locale_matches = locale_fallbacks_in_stack(stack, rules)
+    primary_requires_locale_review = normalized_primary in rules.normalized_locale_fallbacks
     if locale_matches:
+        note = (
+            "Locale-specific fallback chain present at runtime. "
+            "Keep only if script coverage requires it; otherwise review manually."
+        )
+        if primary_requires_locale_review:
+            note = (
+                "Locale-specific primary runtime font detected. "
+                "Review script coverage manually before replacing it with a Latin-default family."
+            )
         findings.append(
             Finding(
                 id=_finding_id(
@@ -182,14 +192,11 @@ def classify_element(
                 primary_font=first,
                 normalized_primary_font=normalized_primary,
                 evidence={"locale_fallbacks": locale_matches},
-                note=(
-                    "Locale-specific fallback chain present at runtime. "
-                    "Keep only if script coverage requires it; otherwise review manually."
-                ),
+                note=note,
             )
         )
 
-    if not rules.is_approved(first):
+    if not rules.is_approved(first) and not primary_requires_locale_review:
         recommended_family = expected_replacement(
             primary_normalized=normalized_primary,
             rules=rules,

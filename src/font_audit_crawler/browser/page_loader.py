@@ -7,16 +7,8 @@ from pathlib import Path
 from typing import cast
 from urllib.parse import urlparse
 
-from playwright.async_api import (
-    Browser,
-    BrowserContext,
-    Page,
-    Request,
-    ViewportSize,
-)
-from playwright.async_api import (
-    TimeoutError as PlaywrightTimeoutError,
-)
+from playwright.async_api import Browser, BrowserContext, Page, Request, ViewportSize
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
 from font_audit_crawler.constants import (
     DEFAULT_USER_AGENT,
@@ -79,7 +71,7 @@ OVERLAY_ACTION_TOKEN_GROUPS = [
         "dismiss",
         "zamknij",
         "cerrar",
-        "閉じる",
+        "\u9589\u3058\u308b",
     ],
     [
         "accept",
@@ -90,9 +82,9 @@ OVERLAY_ACTION_TOKEN_GROUPS = [
         "akcept",
         "zgadz",
         "acept",
-        "同意",
-        "承諾",
-        "続ける",
+        "\u540c\u610f",
+        "\u627f\u8afe",
+        "\u7d9a\u3051\u308b",
         "i understand",
     ],
 ]

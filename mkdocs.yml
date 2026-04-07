@@ -21,4 +21,5 @@ nav:
   - CLI: cli.md
   - Rules Engine: rules-engine.md
   - Reports: reports.md
+  - Security: security.md
   - Testing: testing.md

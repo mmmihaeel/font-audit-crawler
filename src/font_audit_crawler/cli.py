@@ -35,6 +35,8 @@ def _apply_cli_overrides(
     max_pages: int | None,
     max_depth: int | None,
     timeout_ms: int | None,
+    max_page_bytes: int | None,
+    max_sitemap_bytes: int | None,
     include: list[str] | None,
     exclude: list[str] | None,
     viewport: ViewportMode | None,
@@ -51,6 +53,10 @@ def _apply_cli_overrides(
         app_config.scan.max_depth = max_depth
     if timeout_ms is not None:
         app_config.scan.timeout_ms = timeout_ms
+    if max_page_bytes is not None:
+        app_config.scan.max_page_bytes = max_page_bytes
+    if max_sitemap_bytes is not None:
+        app_config.scan.max_sitemap_bytes = max_sitemap_bytes
     if include:
         app_config.scan.include = include
     if exclude:
@@ -93,6 +99,14 @@ def scan(
         int | None,
         typer.Option("--timeout-ms", help="Per-page timeout in milliseconds."),
     ] = None,
+    max_page_bytes: Annotated[
+        int | None,
+        typer.Option("--max-page-bytes", help="Maximum bytes to read for a crawl HTML page."),
+    ] = None,
+    max_sitemap_bytes: Annotated[
+        int | None,
+        typer.Option("--max-sitemap-bytes", help="Maximum bytes to read for sitemap discovery."),
+    ] = None,
     include: Annotated[
         list[str] | None,
         typer.Option("--include", help="Include URL glob or re:pattern."),
@@ -132,6 +146,8 @@ def scan(
         max_pages=max_pages,
         max_depth=max_depth,
         timeout_ms=timeout_ms,
+        max_page_bytes=max_page_bytes,
+        max_sitemap_bytes=max_sitemap_bytes,
         include=include,
         exclude=exclude,
         viewport=viewport,

@@ -15,6 +15,7 @@ The repository includes unit, integration, and end-to-end coverage with local fi
 The local fixture sites cover:
 
 - approved-only typography
+- consent overlay dismissal and filtering
 - bad local `@font-face`
 - suspicious fallback stacks
 - non-approved legacy font usage

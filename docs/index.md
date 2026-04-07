@@ -45,6 +45,7 @@ flowchart LR
 - Configurable rules without recompiling the tool
 - Useful reports, not demo-only artifacts
 - Clean Python package layout with strong typing and tests
+- Secure-by-default operator workflow with no AI runtime surface
 
 ## Next reading
 
@@ -52,4 +53,5 @@ flowchart LR
 - [CLI](cli.md)
 - [Rules Engine](rules-engine.md)
 - [Reports](reports.md)
+- [Security](security.md)
 - [Testing](testing.md)

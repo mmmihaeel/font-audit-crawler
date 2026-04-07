@@ -41,6 +41,8 @@ class ScanConfig(BaseModel):
 
     max_pages: int = Field(default=25, ge=1, le=10_000)
     max_depth: int = Field(default=2, ge=0, le=20)
+    max_page_bytes: int = Field(default=2_000_000, ge=32_768, le=50_000_000)
+    max_sitemap_bytes: int = Field(default=1_000_000, ge=16_384, le=10_000_000)
     include: list[str] = Field(default_factory=list)
     exclude: list[str] = Field(default_factory=list)
     viewport: ViewportMode = ViewportMode.DESKTOP

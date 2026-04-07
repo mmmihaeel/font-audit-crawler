@@ -1,6 +1,11 @@
 locale_fallbacks:
+  - Noto Sans JP
+  - Noto Serif JP
   - Meiryo
   - YuGothic
+  - Yu Gothic
   - Hiragino Kaku Gothic ProN
+  - Hiragino Sans
   - MS PGothic
+  - MS Gothic
   - Osaka

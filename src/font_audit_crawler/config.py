@@ -20,6 +20,8 @@ def load_app_config(path: Path | None) -> AppConfig:
     config = AppConfig.model_validate(raw)
     if config.rules_path is not None and not config.rules_path.is_absolute():
         config.rules_path = (path.parent / config.rules_path).resolve()
+    if config.rules_path is not None and not config.rules_path.exists():
+        raise FileNotFoundError(f"Rules override path does not exist: {config.rules_path}")
     return config
 
 
@@ -76,5 +78,7 @@ def load_rules_bundle(override_path: Path | None = None) -> RulesBundle:
         "locale": _load_packaged_yaml("locale_fallbacks.yaml"),
     }
     if override_path is not None:
+        if not override_path.exists():
+            raise FileNotFoundError(f"Rules override path does not exist: {override_path}")
         bundle = _deep_merge(bundle, _load_rule_overrides(override_path))
     return RulesBundle.model_validate(bundle)

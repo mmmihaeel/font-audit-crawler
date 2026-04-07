@@ -12,6 +12,16 @@ Each scan writes a timestamped output directory containing report artifacts and 
 | `artifacts/crawl-urls.txt` | Final discovered URL list |
 | `screenshots/` | Page screenshots when enabled |
 
+## Rendering safety
+
+The HTML report is intended to be opened locally, but it still applies:
+
+- Jinja autoescaping
+- restrictive CSP via a meta tag
+- `referrer` suppression
+
+This reduces the chance that captured runtime text can execute or leak context when the report is opened.
+
 ## Report sections
 
 The report model includes:
@@ -22,7 +32,7 @@ The report model includes:
 - flat findings list
 - recommended family replacements
 - unresolved non-CSS issues
-- vendor and locale manual-review buckets
+- vendor and locale manual-review buckets, including locale-specific primary runtime families
 - `<head>` font loading guidance
 
 ## Head guidance behavior

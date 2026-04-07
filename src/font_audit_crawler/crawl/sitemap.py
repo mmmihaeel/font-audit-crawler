@@ -5,6 +5,8 @@ from urllib.parse import urljoin
 
 import httpx
 
+from font_audit_crawler.crawl.http_fetch import fetch_bounded_text
+
 
 def guess_sitemap_url(site_url: str) -> str:
     return urljoin(site_url, "/sitemap.xml")
@@ -27,26 +29,41 @@ def _extract_locations(xml_payload: str) -> list[str]:
     ]
 
 
-def fetch_sitemap_urls(site_url: str, timeout: float = 10.0) -> list[str]:
+def fetch_sitemap_urls(
+    site_url: str,
+    timeout: float = 10.0,
+    max_bytes: int = 1_000_000,
+) -> list[str]:
     sitemap_url = guess_sitemap_url(site_url)
-    try:
-        response = httpx.get(sitemap_url, timeout=timeout, follow_redirects=True)
-        response.raise_for_status()
-    except httpx.HTTPError:
-        return []
+    with httpx.Client(timeout=timeout, follow_redirects=True) as client:
+        try:
+            response = fetch_bounded_text(client, sitemap_url, max_bytes=max_bytes)
+        except httpx.HTTPError:
+            return []
+        if response is None:
+            return []
 
-    try:
-        discovered = _extract_locations(response.text)
-    except ET.ParseError:
-        return []
-    nested_urls: list[str] = []
-    if discovered and all(url.endswith(".xml") for url in discovered):
-        for nested_url in discovered:
-            try:
-                nested_response = httpx.get(nested_url, timeout=timeout, follow_redirects=True)
-                nested_response.raise_for_status()
-                nested_urls.extend(_extract_locations(nested_response.text))
-            except (httpx.HTTPError, ET.ParseError):
-                continue
-        return nested_urls
-    return discovered
+        try:
+            discovered = _extract_locations(response.text)
+        except ET.ParseError:
+            return []
+
+        nested_urls: list[str] = []
+        if discovered and all(url.endswith(".xml") for url in discovered):
+            for nested_url in discovered:
+                try:
+                    nested_response = fetch_bounded_text(
+                        client,
+                        nested_url,
+                        max_bytes=max_bytes,
+                    )
+                except httpx.HTTPError:
+                    continue
+                if nested_response is None:
+                    continue
+                try:
+                    nested_urls.extend(_extract_locations(nested_response.text))
+                except ET.ParseError:
+                    continue
+            return nested_urls
+        return discovered

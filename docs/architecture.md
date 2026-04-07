@@ -52,6 +52,7 @@ sequenceDiagram
 
 - Breadth-first crawl order
 - Same-origin restriction
+- Bounded crawl and sitemap response sizes
 - Configurable page and depth caps
 - Stable URL normalization and deduplication
 - Stable finding IDs derived from finding content
@@ -85,3 +86,9 @@ The final `SiteReport` includes:
 - No authenticated session management
 - No CMS-specific connectors
 - No heuristic or AI-driven classification
+
+## Security notes
+
+- Crawl discovery is bounded by response-size caps before parsing.
+- HTML reports are rendered with autoescaping and a restrictive CSP.
+- Consent-management UI is treated as browser chrome, not site typography evidence.

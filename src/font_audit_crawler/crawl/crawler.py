@@ -6,6 +6,7 @@ import httpx
 from selectolax.parser import HTMLParser
 
 from font_audit_crawler.constants import DEFAULT_USER_AGENT
+from font_audit_crawler.crawl.http_fetch import fetch_bounded_text
 from font_audit_crawler.crawl.normalization import is_same_origin, normalize_url
 from font_audit_crawler.crawl.sitemap import fetch_sitemap_urls
 from font_audit_crawler.crawl.url_filters import should_visit
@@ -23,6 +24,8 @@ def discover_urls(
     timeout: float = 10.0,
     sitemap_mode: SitemapMode = SitemapMode.AUTO,
     keep_query_strings: bool = False,
+    max_page_bytes: int = 2_000_000,
+    max_sitemap_bytes: int = 1_000_000,
 ) -> CrawlResult:
     include = include or []
     exclude = exclude or []
@@ -37,7 +40,11 @@ def discover_urls(
     sitemap_urls: list[str] = []
 
     if sitemap_mode is not SitemapMode.NEVER:
-        for sitemap_url in fetch_sitemap_urls(normalized_start, timeout=timeout):
+        for sitemap_url in fetch_sitemap_urls(
+            normalized_start,
+            timeout=timeout,
+            max_bytes=max_sitemap_bytes,
+        ):
             normalized = normalize_url(
                 sitemap_url,
                 keep_query_strings=keep_query_strings,
@@ -58,13 +65,20 @@ def discover_urls(
 
             visited.add(current)
             try:
-                response = client.get(current)
-                response.raise_for_status()
+                response = fetch_bounded_text(
+                    client,
+                    current,
+                    max_bytes=max_page_bytes,
+                )
             except httpx.HTTPError:
                 continue
+            if response is None:
+                continue
 
-            content_type = response.headers.get("content-type", "")
-            if "text/html" not in content_type:
+            if not any(
+                content_type in response.content_type
+                for content_type in ("text/html", "application/xhtml+xml")
+            ):
                 continue
 
             discovered.append(current)

@@ -10,7 +10,7 @@
 - Runtime `@font-face` or embedded font loading visible through the CSSOM
 - Visible inline `font-family` declarations
 - Vendor/widget exception buckets
-- Locale-specific fallback chains that require manual review
+- Locale-specific fallback chains or primary script-specific families that require manual review
 
 ## Why runtime-first
 
@@ -23,6 +23,15 @@ Source-only remediation can look correct while runtime still exposes legacy typo
 - YAML-driven rules for approved families, mappings, fallbacks, vendor exceptions, and locale review
 - Same-origin crawl discipline with sitemap support, include/exclude rules, max depth, and max pages
 - Production-minded CLI ergonomics, reports, tests, and docs
+
+## Security and operational posture
+
+- Runtime behavior is deterministic and contains no AI, LLM, prompt, or inference logic
+- The crawler is same-origin only and applies bounded fetch limits to sitemap and HTML discovery responses
+- The HTML report is rendered with autoescaping and a restrictive Content Security Policy
+- Consent and cookie-management UI are filtered out of runtime findings so third-party overlays do not pollute audit evidence
+- For hostile or unknown targets, run scans in an isolated CI runner, container, or VM with restricted network egress
+- Report artifacts include page text samples from scanned sites, so treat them as untrusted input when sharing downstream
 
 ## Quick start
 
@@ -37,6 +46,7 @@ uv run font-audit scan --url https://example.com
 ```bash
 uv run font-audit scan --url https://example.com --max-pages 25 --max-depth 2
 uv run font-audit scan --url https://example.com --rules ./examples/rules.overrides.yaml
+uv run font-audit scan --url https://example.com --timeout-ms 45000 --max-page-bytes 2000000
 uv run font-audit validate-config --config ./examples/config.basic.yaml
 uv run font-audit list-rules
 uv run font-audit doctor
@@ -48,6 +58,8 @@ uv run font-audit doctor
 scan:
   max_pages: 50
   max_depth: 3
+  max_page_bytes: 2000000
+  max_sitemap_bytes: 1000000
   viewport: both
   screenshot: finding
   fail_on: high
@@ -118,6 +130,7 @@ uv run mkdocs build --strict
 - [CLI](docs/cli.md)
 - [Rules Engine](docs/rules-engine.md)
 - [Reports](docs/reports.md)
+- [Security](docs/security.md)
 - [Testing](docs/testing.md)
 
 ## License

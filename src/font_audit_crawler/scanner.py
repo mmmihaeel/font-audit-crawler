@@ -118,6 +118,8 @@ async def run_scan(
         timeout=config.scan.timeout_ms / 1000,
         sitemap_mode=config.scan.sitemap,
         keep_query_strings=config.scan.keep_query_strings,
+        max_page_bytes=config.scan.max_page_bytes,
+        max_sitemap_bytes=config.scan.max_sitemap_bytes,
     )
     if not crawl_result.urls:
         raise RuntimeError("No crawlable same-origin pages were discovered.")

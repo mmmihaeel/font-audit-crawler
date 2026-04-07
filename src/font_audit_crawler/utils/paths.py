@@ -19,4 +19,4 @@ def make_output_dir(root: Path | None, site_url: str) -> Path:
 def relative_to(base: Path, target: Path | None) -> str | None:
     if target is None:
         return None
-    return str(target.relative_to(base))
+    return target.relative_to(base).as_posix()

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <meta name="referrer" content="no-referrer">
   <title>Font Audit Report</title>
   <style>
     :root {
@@ -188,7 +190,7 @@
             <td>{{ page.findings_total }}</td>
             <td>
               {% if page.screenshot_path %}
-              <a href="{{ page.screenshot_path }}">{{ page.screenshot_path }}</a>
+              <a href="{{ page.screenshot_path }}" rel="noopener noreferrer">{{ page.screenshot_path }}</a>
               {% else %}
               -
               {% endif %}
@@ -243,7 +245,7 @@
         <pre>{{ finding.evidence }}</pre>
         {% endif %}
         {% if finding.screenshot_path %}
-        <p><strong>Screenshot:</strong> <a href="{{ finding.screenshot_path }}">{{ finding.screenshot_path }}</a></p>
+        <p><strong>Screenshot:</strong> <a href="{{ finding.screenshot_path }}" rel="noopener noreferrer">{{ finding.screenshot_path }}</a></p>
         {% endif %}
       </article>
       {% endfor %}

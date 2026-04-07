@@ -88,7 +88,7 @@ def test_locale_fallback_is_manual_review() -> None:
             RuntimeTextElement(
                 audit_id="fa-1",
                 selector="body",
-                text="日本語の見出し",
+                text="Japanese headline",
                 font_family='"Roboto", "YuGothic", Meiryo, sans-serif',
                 font_weight="400",
                 font_style="normal",
@@ -122,7 +122,7 @@ def test_local_font_face_rule_is_high_severity() -> None:
     assert any(f.severity == Severity.HIGH for f in findings)
 
 
-def test_duplicate_runtime_non_approved_font_findings_are_aggregated() -> None:
+def test_duplicate_locale_review_findings_are_aggregated() -> None:
     rules = load_rules_bundle()
     page = PageRuntimeSnapshot(
         url="https://example.com/aggregate",
@@ -150,7 +150,30 @@ def test_duplicate_runtime_non_approved_font_findings_are_aggregated() -> None:
     )
     findings = classify_page(page, rules)
     matching = [
-        finding for finding in findings if finding.type is FindingType.RUNTIME_NON_APPROVED_FONT
+        finding for finding in findings if finding.type is FindingType.LOCALE_FALLBACK_REVIEW
     ]
     assert len(matching) == 1
     assert matching[0].evidence["occurrences"] == 2
+
+
+def test_locale_primary_font_stays_manual_review_without_default_replacement() -> None:
+    rules = load_rules_bundle()
+    page = PageRuntimeSnapshot(
+        url="https://example.com/ja/runtime",
+        viewport="desktop",
+        elements=[
+            RuntimeTextElement(
+                audit_id="fa-1",
+                selector="main",
+                text="Japanese body copy",
+                font_family='"Noto Sans JP", sans-serif',
+                font_weight="400",
+                font_style="normal",
+                tag_name="main",
+            )
+        ],
+    )
+    findings = classify_page(page, rules)
+
+    assert any(f.type is FindingType.LOCALE_FALLBACK_REVIEW for f in findings)
+    assert all(f.type is not FindingType.RUNTIME_NON_APPROVED_FONT for f in findings)
